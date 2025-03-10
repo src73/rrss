@@ -1,9 +1,12 @@
 ## rrss
-Functionally, rrss is a private news aggregator you control with a visual design inspired by [Hacker News](https://news.ycombinator.com/). I designed it quickly as a drop-in replacement for Hacker News so that I could doom-scroll on news sources that are more closely aligned to my goals. 
+Functionally, rrss is a **private news aggregator** you control with a visual design inspired by [Hacker News](https://news.ycombinator.com/). I designed it quickly as a drop-in replacement for Hacker News so that I could doom-scroll on news sources that are more closely aligned to my goals. 
 
-Technically, rrss is a self-hosted RSS reader in PHP and sqlite. 
+Technically, rrss is a **self-hosted [RSS](https://en.wikipedia.org/wiki/RSS) reader** in PHP and sqlite. 
 
-![](rrss-demo.png)
+<img src="rrss-demo.png" alt="Screenshot of rrss front-end" style="max-width: 300px;">
+
+## Ongoing maintenance 
+This project is provided as-is and is not actively maintained. I plan to fix bugs and make enhancements as they impact my life. 
 
 ## Installation and configuration
 
@@ -12,15 +15,15 @@ One day rrss will have a nice configuration script. Until that day:
 
 1. Copy `rrss_blank_db.db` to `rrss.db`
 
-2. the RSS feeds you want to scrape are configurable in `load.php` - you should change them! Check that you don't have any syntax errors by visiting `http://my-host.com/load.php`. 
+2. the RSS feeds you want to scrape are configurable in `load.php` - you should change them! Check that you don't have any syntax errors by visiting `http://example.com/load.php`. 
 
 
 ### 2. Host the code
-You can host the code anywhere that allows 
+You can host the code anywhere that allows PHP with persistent file writing. 
 
-I use a free PHP host like (InfinityFree)[https://www.infinityfree.com/]. 
+I use a free PHP host like [InfinityFree](https://www.infinityfree.com/). 
 
-Hosting is very simple - just drag-n-drop the files to your host. 
+Hosting is very simple: simply drag-n-drop the files to your web server and cross your fingers. 
 
 ### 3. Schedule the loading job
 
@@ -44,13 +47,10 @@ It's easy JS and PHP code that's pretty easy to hack into what you'd like. Here 
 * define patterns you would like to hide (look in `index.php` for code like `if(domain == 'ft.com' && art.title.includes("Live news: ")){out = [];}`. Alternatively, you could add it to `load.php` so it's never loaded). 
 
 ## Technical limitations and to-dos
-Here are some pieces of technical work that could be completed. I have no current plans to work on it because the code currently works adequately for my purposes. 
+I wrote this project so I could focus on what's happening in the world, so the code is less than perfect. If time were infinite I would: 
 
 - [ ] **Properly escape un-sanitized strings in `convertArticleToHtml()`** - The current JavaScript string-concatenation approach could hijack the page display if an attacker inserted a properly formatted 
 - [ ] **Error handling in `load.php`** - `load.php` lacks robust error handling to detect that, say, a data source has failed to load. 
 - [ ] **Convert to static-site generator** - I'd love to have the back-end generate a static `json` file which is posted to a static site hosting site (like GitHub Pages). I've found free PHP hosts to be less reliable, so moving the rss-feed-digesting to the PC in my closet and serving to something solid like GitHub Pages would allow greater reliability in ways that matter to me. 
 - [ ] **Do not publically serve the sqlite database** - without further configuration of the web server anyone on the internet can download the sqlite database. This is traditionally considered a security vulnerability. However, there is no "private" data in the sqlite database; `rrss.php` exists to turn any information in the db into a JSON file. 
-
-## Ongoing maintenance 
-This project is provided as-is and is not actively maintained. I plan to fix bugs / make enhancements as they impact my life. 
-
+- [ ] **Add analytics** - I'd love to know what I'm reading from here. 
