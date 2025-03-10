@@ -49,8 +49,8 @@ It's easy JS and PHP code that's pretty easy to hack into what you'd like. Here 
 ## Technical limitations and to-dos
 I wrote this project so I could focus on what's happening in the world, so the code is less than perfect. If time were infinite I would: 
 
-- [ ] **Properly escape un-sanitized strings in `convertArticleToHtml()`** - The current JavaScript string-concatenation approach could hijack the page display if an attacker inserted a properly formatted 
-- [ ] **Error handling in `load.php`** - `load.php` lacks robust error handling to detect that, say, a data source has failed to load. 
+- [ ] **Properly escape un-sanitized strings in `convertArticleToHtml()`** - The current JavaScript string-concatenation approach could hijack the page display if an attacker inserted a properly formatted string through a malicious RSS file. 
+- [ ] **Error handling in `load.php`** - `load.php` manages errors and timeouts by (a) randomizing the order of feeds ingested, and (b) assuming that it'll run again soon. As a result, it is unlikely to fully refresh all feeds in one run. Instead, it'll probably aggregate most of the feeds eventually. 
 - [ ] **Convert to static-site generator** - I'd love to have the back-end generate a static `json` file which is posted to a static site hosting site (like GitHub Pages). I've found free PHP hosts to be less reliable, so moving the rss-feed-digesting to the PC in my closet and serving to something solid like GitHub Pages would allow greater reliability in ways that matter to me. 
 - [ ] **Do not publically serve the sqlite database** - without further configuration of the web server anyone on the internet can download the sqlite database. This is traditionally considered a security vulnerability. However, there is no "private" data in the sqlite database; `rrss.php` exists to turn any information in the db into a JSON file. 
 - [ ] **Add analytics** - I'd love to know what I'm reading from here. 
