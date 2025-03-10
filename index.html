@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=yes">
+	<title>rrss</title>
+	<style>
+		body {
+			margin:0;
+		}
+		.article a {
+			text-decoration: none;
+			color:#222;
+		}
+
+		.article {
+			margin-top:5px;
+			background-color:#fafafa;
+			padding:5px;
+			font-family:helvetica;
+		}
+
+		.dtText {
+			color:green;
+			font-size:x-small;
+		}
+
+		.article .description {
+			font-size:x-small;
+			color:gray;
+		}
+
+		.title {
+			font-family: Palatino;
+			font-weight:bolder;
+		}
+
+		.provider {
+			color:red;
+			font-size:x-small;
+		}
+
+		.darkenArticle a {
+			color:#999;
+			font-size:smaller;
+		}
+		</style>
+
+</head>
+
+<body>
+
+
+	<div id='wrapper'>Loading...</div>
+
+
+	<script>
+
+			var j; 
+
+			var formatDate = function(dtString) {
+				var opts = { weekday: 'long', month: 'long', day: 'numeric', hour:'numeric', 'minute':'numeric' };
+				return (new Date(dtString)).toLocaleString('en-us',opts) + " Pacific"
+			}
+
+
+
+			var getUrlVars = (function(a) {
+			    if (a == "") return {};
+			    var b = {};
+			    for (var i = 0; i < a.length; ++i)
+			    {
+			        var p=a[i].split('=', 2);
+			        if (p.length == 1)
+			            b[p[0]] = "";
+			        else
+			            b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+			    }
+			    return b;
+			})(window.location.search.substr(1).split('&'));
+
+			var selectDropDownVal = function(selectId, optionValToSelect){
+				// https://thisinterestsme.com/change-select-option-javascript/
+
+			    //Get the select element by it's unique ID.
+			    var selectElement = document.getElementById(selectId);
+			    //Get the options.
+			    var selectOptions = selectElement.options;
+			    //Loop through these options using a for loop.
+			    for (var opt, j = 0; opt = selectOptions[j]; j++) {
+			        //If the option of value is equal to the option we want to select.
+			        if (opt.value == optionValToSelect) {
+			            //Select the option and break out of the for loop.
+			            selectElement.selectedIndex = j;
+			            break;
+			        }
+			    }
+			}
+
+
+			var isMobile = navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i)
+
+			var paywalls = ['nytimes.com', 'wsj.com', 'wired.com', 'washingtonpost.com', 'bloomberg.com', 'businessinsider.com', 'newyorker.com', 'foreignpolicy.com', 'sifted.eu', 'latimes.com', 'texasmonthly.com', 'theatlantic.com']
+
+			if(!isMobile) {
+				// more paywalls when not on iPhone
+				paywalls.push("ft.com")
+				paywalls.push("economist.com")
+			}
+
+			var convertArticleToHtml = function(art) {
+				var out = [];
+				try {
+					var graytext = ''
+					var publisher = ''
+
+					var domain = (new URL(art.link)).hostname.split("www.").join("")//.split(".com").join("")
+
+					if(paywalls.includes(domain)) {
+						art.link = 'https://archive.is/newest/' + art.link
+					}
+
+
+
+					classes = []
+
+					classes.push("article")
+					classes.push(graytext)
+
+
+
+					out.push("<div class='"+classes.join(" ")+"'>")
+					out.push("<a href='" + art.link + "'>")
+
+					out.push("<span class='provider'>")
+						out.push(domain) // the domain
+					out.push("</span> ")
+
+					
+					
+					out.push("<span class='dtText'>")
+					out.push(" / ")
+					out.push(formatDate(art.pubDate))
+					out.push("</span>")
+
+					out.push("<br>")
+
+					out.push("<span class='title'>")
+					var theTitle = art.title
+					if(typeof art.description == 'string' && art.description.includes("via Google")) {
+						// remove ` - Bloomberg` from title
+						var theTitleAry = theTitle.split('-');
+						theTitleAry.pop() // remove last element
+						theTitle = theTitleAry.join("-").trim()
+					}
+					out.push(theTitle)
+					out.push("</span>")
+
+
+
+					
+
+					out.push("<br>")
+					
+					out.push("<span class='description'>")
+
+					
+					if(typeof art.category == 'string') {
+						out.push("(" + art.category + ") ")
+					}
+
+					if(Array.isArray(art.category) == true) {
+						if(art.category.length > 0) {
+							out.push("(" + art.category[0] + ") ")
+						}
+						
+					}
+
+					// exclude nonsense
+
+					try {
+						var desc = art.description.replace(/(<([^>]+)>)/gi, "");
+
+						if(desc.includes("Comments URL: https://news.ycombinator.com")){
+							out.push(" via HN")
+						}
+						else {
+							if(desc.length  > 300) {
+								desc = desc.substr(0,300).trim() + "..."
+							}
+							out.push(desc)
+						}
+					}
+					catch(e) {
+						out.push(art.description);
+					}
+					
+					
+
+
+					out.push("</span>")
+
+					out.push("</div>")
+
+					out.push("</a>")
+
+					// now let's do some nonsense to hide some things. 
+					if(domain == 'ft.com' && art.title.includes("Live news: ")){
+						out = [];
+					}
+
+					if(domain == 'newyorker.com' && art.title.includes("The Crossword: ")){
+						out = [];
+					}
+
+					if(domain == 'newyorker.com' && art.title.includes("The Mail")){
+						out = [];
+					}
+
+					if(domain == 'newyorker.com' && art.link.includes("humor/borowitz-report/")) {
+						out = [];
+					}
+
+					if(domain=='cleantechnica.com' && art.title.includes("Tesla")) {
+						out = [];
+					}
+
+					if(domain == 'cleantechnica.com' && typeof art.category == 'string' && art.category.includes("Cars")) {
+						out = [];
+					}
+				}
+				catch(e) {
+					console.log(e)
+				}
+
+				return out.join("")
+			}
+
+			var doWhenRssComesBack = function(rss) {
+				// console.log(rss)
+
+				// due to some obnoxious things, we need to parse the json twice. 
+				// I'm guessing that the performance implications are small? 
+				j = JSON.parse(rss).map(function(f) {return JSON.parse(f.txt)}) 
+
+
+				// for each item
+				var out = j.map(convertArticleToHtml).join("")
+
+				console.log("see JSON with `j`")
+
+				document.getElementById('wrapper').innerHTML = (out)
+
+
+			}
+
+			
+
+
+
+		// fetch(feed)
+		//   .then(response => response.text())
+		//   .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+		//   .then(data => {console.log(data); d=data})
+
+
+
+		fetch('rrss.php')
+			.then(response => response.text())
+			.then(doWhenRssComesBack)
+
+
+
+
+	</script>
+
+
+</body>
+</html>
