@@ -3,7 +3,7 @@ Functionally, rrss is a **private news aggregator** you control with a visual de
 
 Technically, rrss is a **self-hosted [RSS](https://en.wikipedia.org/wiki/RSS) reader** in PHP and sqlite. 
 
-<img src="rrss-demo.png" alt="Screenshot of rrss front-end" width="300px">
+<img src="rrss-demo.png" alt="Screenshot of rrss front-end" width="300">
 
 ## Ongoing maintenance 
 This project is provided as-is and is not actively maintained. I plan to fix bugs and make enhancements as they impact my life. 
