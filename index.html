@@ -115,6 +115,16 @@
 
 					var domain = (new URL(art.link)).hostname.split("www.").join("")//.split(".com").join("")
 
+					if(domain == 'news.google.com') {
+						try {
+							// get the domain from the description
+							domain = art.description.split("site:")[1].split(")").join("")
+						}
+						catch(e) {
+							true; 
+						}
+					}
+
 					if(paywalls.includes(domain)) {
 						art.link = 'https://archive.is/newest/' + art.link
 					}

@@ -56,7 +56,7 @@ $sites = array('https://about.bnef.com/rss',
 'https://ft.com/opinion?format=rss',
 'https://ft.com/work-careers?format=rss',
 'https://sifted.eu/feed/?post_type=article',
-'http://www.newyorker.com/feed/humor',
+// 'http://www.newyorker.com/feed/humor',
 'https://www.newyorker.com/feed/posts',
 'https://www.newyorker.com/feed/tech',
 'https://spectrum.ieee.org/rss',
@@ -66,13 +66,14 @@ $sites = array('https://about.bnef.com/rss',
 'https://rss.nytimes.com/services/xml/rss/nyt/EnergyEnvironment.xml',
 'https://rss.nytimes.com/services/xml/rss/nyt/Climate.xml',
 'https://www.climatedesk.org/rss',
-// 'https://www.eenews.net/publication/climatewire/rss', // no longer exists
+'https://www.eenews.net/articles/feed/',
 'https://insideclimatenews.org/rss',
 'https://rmi.org/feed',
 'https://www.renewableenergyworld.com/feed',
 'https://cleantechnica.com/rss',
 // 'https://www.texasmonthly.com/category/energy/rss', // anti-scraping? 
-'https://news.google.com/rss/search?q="green+data+dash"+site:bloomberg.com',
+// 'https://news.google.com/rss/search?q="green+data+dash"+site:bloomberg.com', // https://www.reddit.com/r/rss/comments/u1op2b/does_bloomberg_has_a_rss_feed_for_free/
+'https://feeds.bloomberg.com/green/news.rss',
 'https://news.google.com/rss/search?q=cleantech', 
 'https://news.google.com/rss/search?q=climate+green+energy+site:reuters.com',
 'https://news.google.com/rss/search?q="cnet-zero"+site:cnet.com',
@@ -90,7 +91,13 @@ $sites = array('https://about.bnef.com/rss',
 'https://e360.yale.edu/feed.xml',
 'https://www.spiegel.de/international/index.rss',
 'https://mainichi.jp/rss/etc/english_latest.rss',
-'https://www.utilitydive.com/feeds/news/'
+'https://www.utilitydive.com/feeds/news/',
+'http://associated-press.s3-website-us-east-1.amazonaws.com/climate-and-environment.xml', // https://github.com/rererecursive/associated-press-rss
+'https://feeds.bbci.co.uk/news/topics/cmj34zmwm1zt/rss.xml',
+'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',
+'https://www.theguardian.com/us/environment/rss',
+'https://agfundernews.com/rss',
+'https://www.propublica.org/feeds/propublica/main'
 );
 
 
@@ -146,11 +153,14 @@ function doOneUrl($bs) {
 	// convert to associative arrays, get some nodes 
 	// you can get around this by accessing it like:
 	// $x -> channel -> item[0]
+
 	$items = json_decode(json_encode($x), TRUE)['channel']['item'];
+
 
 	try {
 	   $db = new PDO("sqlite:".__DIR__."/rrss.db");
 	    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	    $db->exec("PRAGMA journal_mode=WAL;"); // try to improve read-while-write performance 
 	}   catch (Exception $e) {
 	    echo "Unable to connect";
 	    echo $e->getMessage();
@@ -174,9 +184,6 @@ function doOneUrl($bs) {
 			$date = new DateTime($pubdate);
 			$date->setTimezone($tz);
 
-
-
-
 			$stmt = $db->prepare("insert or ignore into f select :url, :ts, :txt");
 			$stmt->execute(['url' => $val['link'], 'ts' => $date->format('c'), 'txt' => json_encode($val)]);
 			// print(json_encode($val));
@@ -187,6 +194,10 @@ function doOneUrl($bs) {
 			print($e);
 		}
 	}
+
+	$db = null; // close db connection; probably happens anyways when function ends. 
+
+
 }
 
 
