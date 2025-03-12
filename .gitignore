@@ -1,3 +1,6 @@
 .DS_Store
 rrss.db
+rrss.db-shm
+rrss.db-wal
 old/
+rrss.json

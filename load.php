@@ -75,7 +75,8 @@ $sites = array('https://about.bnef.com/rss',
 // 'https://news.google.com/rss/search?q="green+data+dash"+site:bloomberg.com', // https://www.reddit.com/r/rss/comments/u1op2b/does_bloomberg_has_a_rss_feed_for_free/
 'https://feeds.bloomberg.com/green/news.rss',
 'https://news.google.com/rss/search?q=cleantech', 
-'https://news.google.com/rss/search?q=climate+green+energy+site:reuters.com',
+'https://news.google.com/rss/search?q=climate+green+energy+site:reuters.com/sustainability',
+'https://news.google.com/rss/search?q=when:2d+site:reuters.com/sustainability',
 'https://news.google.com/rss/search?q="cnet-zero"+site:cnet.com',
 'https://news.google.com/rss/search?q=climate+environment+site:washingtonpost.com',
 'https://news.google.com/rss/search?q=climate+environment+site:time.com',
@@ -97,7 +98,9 @@ $sites = array('https://about.bnef.com/rss',
 'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',
 'https://www.theguardian.com/us/environment/rss',
 'https://agfundernews.com/rss',
-'https://www.propublica.org/feeds/propublica/main'
+'https://www.propublica.org/feeds/propublica/main',
+'https://feeds.npr.org/1025/rss.xml', // climate and environment 
+'https://www.latitudemedia.com/feed/'
 );
 
 
