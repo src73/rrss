@@ -17,13 +17,14 @@ One day rrss will have a nice configuration script. Until that day:
 
 2. the RSS feeds you want to scrape are configurable in `load.php` - you should change them! Check that you don't have any syntax errors by visiting `http://example.com/load.php`. 
 
-
 ### 2. Host the code
 You can host the code anywhere that allows PHP with persistent file writing. 
 
 I use a free PHP host like [InfinityFree](https://www.infinityfree.com/). 
 
 Hosting is very simple: simply drag-n-drop the files to your web server and cross your fingers. 
+
+
 
 ### 3. Schedule the loading job
 
@@ -45,6 +46,21 @@ It's easy JS and PHP code that's pretty easy to hack into what you'd like. Here 
 
 * configure sites where you would always like to see an archived version in the `index.html` array `paywalls`
 * define patterns you would like to hide (look in `index.php` for code like `if(domain == 'ft.com' && art.title.includes("Live news: ")){out = [];}`. Alternatively, you could add it to `load.php` so it's never loaded). 
+
+### Notes for Oracle Linux on Oracle Cloud
+
+If you're using a VPS (like [Oracle Cloud](https://docs.oracle.com/en-us/iaas/developer-tutorials/tutorials/apache-on-oracle-linux/01-summary.htm)) you might need to install the following PHP extensions: 
+
+```
+sudo dnf install php-pdo
+sudo dnf install php-xml
+sudo dnf install php-json
+```
+
+You may run into troubles with SELinux and SQLite. To get around that: 
+
+1. run `all_together.php` in cron (rather than `load.php`)
+2. in `index.html`, find `rrss.php` and replace it with `rrss.json`. This will change the JavaScript so that it grabs from the pre-computed static json file rather than reading the json from the database on the fly. 
 
 ## Technical limitations and to-dos
 I wrote this project so I could focus on what's happening in the world, so the code is less than perfect. If time were infinite I would: 
