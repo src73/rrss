@@ -45,7 +45,7 @@ Simply visit http://example.com/  to see your news feed!
 It's easy JS and PHP code that's pretty easy to hack into what you'd like. Here are some ideas: 
 
 * configure sites where you would always like to see an archived version in the `index.html` array `paywalls`
-* define patterns you would like to hide (look in `index.php` for code like `if(domain == 'ft.com' && art.title.includes("Live news: ")){out = [];}`. Alternatively, you could add it to `load.php` so it's never loaded). 
+* define patterns you would like to hide (look in `index.html` for code like `if(domain == 'ft.com' && art.title.includes("Live news: ")){out = [];}`. Alternatively, you could add it to `load.php` so it's never loaded). 
 
 ### Troubleshooting (particularly on Oracle Linux)
 
