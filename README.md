@@ -47,9 +47,9 @@ It's easy JS and PHP code that's pretty easy to hack into what you'd like. Here 
 * configure sites where you would always like to see an archived version in the `index.html` array `paywalls`
 * define patterns you would like to hide (look in `index.php` for code like `if(domain == 'ft.com' && art.title.includes("Live news: ")){out = [];}`. Alternatively, you could add it to `load.php` so it's never loaded). 
 
-### Notes for Oracle Linux on Oracle Cloud
+### Troubleshooting (particularly on Oracle Linux)
 
-If you're using a VPS (like [Oracle Cloud](https://docs.oracle.com/en-us/iaas/developer-tutorials/tutorials/apache-on-oracle-linux/01-summary.htm)) you might need to install the following PHP extensions: 
+You might need to install the following PHP extensions (I needed to on Oracle Linux on [Oracle Cloud](https://docs.oracle.com/en-us/iaas/developer-tutorials/tutorials/apache-on-oracle-linux/01-summary.htm)): 
 
 ```
 sudo dnf install php-pdo
@@ -57,9 +57,9 @@ sudo dnf install php-xml
 sudo dnf install php-json
 ```
 
-You may run into troubles with SELinux and SQLite. To get around that: 
+You may run into troubles with SELinux and SQLite, particularly if using Oracle Linux. To get around that: 
 
-1. run `all_together.php` in cron (rather than `load.php`)
+1. run `sudo php /path/to/all_together.php` in cron (rather than `curl http://example.com/load.php`)
 2. in `index.html`, find `rrss.php` and replace it with `rrss.json`. This will change the JavaScript so that it grabs from the pre-computed static json file rather than reading the json from the database on the fly. 
 
 ## Technical limitations and to-dos
