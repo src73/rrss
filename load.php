@@ -100,7 +100,10 @@ $sites = array('https://about.bnef.com/rss',
 'https://agfundernews.com/rss',
 'https://www.propublica.org/feeds/propublica/main',
 'https://feeds.npr.org/1025/rss.xml', // climate and environment 
-'https://www.latitudemedia.com/feed/'
+'https://www.latitudemedia.com/feed/',
+'https://knowridge.com/feed/',
+'https://earthlymattersmatter.substack.com/feed',
+'https://openrss.org/www.thetimes.com/uk/environment'
 );
 
 

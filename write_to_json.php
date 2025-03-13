@@ -1,5 +1,5 @@
 <?php
-    $db = new SQLite3('rrss.db');
+    $db = new PDO("sqlite:".__DIR__."/rrss.db");
     $db->exec("PRAGMA journal_mode=WAL;");
 
     $tz = new DateTimeZone('America/Los_Angeles');
