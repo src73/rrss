@@ -24,8 +24,6 @@ I use a free PHP host like [InfinityFree](https://www.infinityfree.com/).
 
 Hosting is very simple: simply drag-n-drop the files to your web server and cross your fingers. 
 
-
-
 ### 3. Schedule the loading job
 
 rrss comes with a loading script `load.php` which visits the configured RSS feeds, collates the information, and loads it into the sqlite database. You'll want to run this frequently. 
@@ -45,18 +43,22 @@ Simply visit http://example.com/  to see your news feed!
 It's easy JS and PHP code that's pretty easy to hack into what you'd like. Here are some ideas: 
 
 * configure sites where you would always like to see an archived version in the `index.html` array `paywalls`
-* define patterns you would like to hide (look in `index.html` for code like `if(domain == 'ft.com' && art.title.includes("Live news: ")){out = [];}`. Alternatively, you could add it to `load.php` so it's never loaded). 
+* define patterns you would like to hide (look in `index.html` for code like `if(domain == 'ft.com' && art.title.includes("Live news: ")){out = [];}`. Alternatively, you could edit `load.php` so it's never loaded). 
 
-### Troubleshooting (particularly on Oracle Linux)
+### Troubleshooting PHP extensions
 
-You might need to install the following PHP extensions (I needed to on Oracle Linux on [Oracle Cloud](https://docs.oracle.com/en-us/iaas/developer-tutorials/tutorials/apache-on-oracle-linux/01-summary.htm)): 
+You might need to install the following PHP extensions: 
 
 ```
-sudo dnf install php-pdo
-sudo dnf install php-xml
-sudo dnf install php-json
+sudo apt install php-pdo
+sudo apt install php-xml
+sudo apt install php-json
+sudo apt install sqlite3 
+sudo apt install php-sqlite3
+sudo apt install php-curl
 ```
 
+### Troubleshooting SELinux and Oracle Linux 
 You may run into troubles with SELinux and SQLite, particularly if using Oracle Linux. To get around that: 
 
 1. run `sudo php /path/to/all_together.php` in cron (rather than `curl http://example.com/load.php`)

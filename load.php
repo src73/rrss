@@ -103,7 +103,8 @@ $sites = array('https://about.bnef.com/rss',
 'https://www.latitudemedia.com/feed/',
 'https://knowridge.com/feed/',
 'https://earthlymattersmatter.substack.com/feed',
-'https://openrss.org/www.thetimes.com/uk/environment'
+'https://openrss.org/www.thetimes.com/uk/environment',
+'https://www.informal.cc/feed'
 );
 
 
@@ -124,13 +125,37 @@ function dropOldArticles() {
 		$stmt->execute([]);
 }
 
+function fetch_url_with_curl($url) {
+	# this works properly on Oracle Cloud where file_get_contents() doesn't. And hopefully other places. 
+	# file_get_contents mostly worked, but did not follow redirects at FT. 
+	# chatgpt 
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+    curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (compatible; PHP RSS Fetcher)");
+
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    if (curl_errno($ch)) {
+        throw new Exception("cURL error: " . curl_error($ch));
+    }
+
+    if ($httpCode !== 200) {
+        throw new Exception("Failed to fetch RSS feed, HTTP status code: " . $httpCode);
+    }
+
+    curl_close($ch);
+    return $response;
+}
 
 function doOneUrl($bs) {
 
 
-	$f = file_get_contents($bs);
-
-
+	$f = fetch_url_with_curl($bs);
 	
 	$x = simplexml_load_string($f, 'SimpleXMLElement', LIBXML_NOCDATA);
 
@@ -271,7 +296,7 @@ function extractGooB64($u) {
 function doOneUrl_google($bs) {
 
 
-	$f = file_get_contents($bs);
+	$f = fetch_url_with_curl($bs);
 
 
 	$x = simplexml_load_string($f, 'SimpleXMLElement', LIBXML_NOCDATA);

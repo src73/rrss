@@ -8,7 +8,7 @@
 
     $results = $db->query("SELECT * FROM f where ts <= '" . $date->format('c') . "' order by ts desc limit 400;");
     $data = array();
-    while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
+    while ($row = $results->fetch()) {
         array_push($data, $row);
     }
     file_put_contents('rrss.json', json_encode($data))
