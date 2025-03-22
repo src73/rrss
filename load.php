@@ -104,7 +104,10 @@ $sites = array('https://about.bnef.com/rss',
 'https://knowridge.com/feed/',
 'https://earthlymattersmatter.substack.com/feed',
 'https://openrss.org/www.thetimes.com/uk/environment',
-'https://www.informal.cc/feed'
+'https://www.informal.cc/feed',
+'https://washingtonmonthly.com/feed',
+'https://www.construction-physics.com/feed',
+'https://www.anthropocenemagazine.org/feed/'
 );
 
 

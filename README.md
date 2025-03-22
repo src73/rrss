@@ -28,7 +28,7 @@ Hosting is very simple: simply drag-n-drop the files to your web server and cros
 
 rrss comes with a loading script `load.php` which visits the configured RSS feeds, collates the information, and loads it into the sqlite database. You'll want to run this frequently. 
 
-Your host might come with job scheduling built in (in which case use that!), but mine no longer does. Instead I run it every 5 minutes via Cron on one of my computers that's frequently on. 
+Your host might come with job scheduling built in (in which case use that!), but mine no longer does. Instead I run it every 5 minutes via Cron on one of my computers that's frequently on. ]
 
 Here's the crontab entry: 
 
